@@ -1,3 +1,6 @@
+//! Handles codegen/rendering of `RpcRootSpec`, `RpcStructSpec` and `RpcFieldSpec`'s.
+//! Includes codegen for various helpers and extra types to facilitate working with the
+//! Kafka protocol.
 use crate::{RpcFieldSpec, RpcRootSpec, RpcStructSpec};
 use inflector::Inflector;
 use proc_macro2::TokenStream;
@@ -6,6 +9,8 @@ use std::collections::HashMap;
 use syn;
 
 impl RpcFieldSpec {
+    /// Returns the Rust type most closely associated with a Kafka RPC schema type.
+    /// For example, `Bool` => `bool`, or an optional `String` => `Option<String>`.
     fn field_type(&self) -> proc_macro2::TokenStream {
         let mut tokens = match self.type_name.as_str() {
             "Bool" => quote! { bool },
@@ -32,6 +37,7 @@ impl RpcFieldSpec {
 }
 
 impl ToTokens for RpcFieldSpec {
+    /// Writes an `RpcFieldSpec`, including field attributes to support deriving `KafkaRpc`.
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let field_name = self.field_name.clone();
         let version_added = self.version_added;

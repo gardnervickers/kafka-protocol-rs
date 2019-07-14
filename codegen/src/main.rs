@@ -19,12 +19,18 @@ pub mod error;
 mod render;
 pub mod schema;
 
+/// Kafka git repository
 const REPOSITORY: &str = "https://github.com/apache/kafka";
+/// Kafka release branch
 const VERSION: &str = "2.2.1";
+/// Path to Kafka RPC schema files
 const SCHEMA_PATH: &str = "clients/src/main/resources/common/message";
+/// Target Rust file to output Kafka RPC types
 const API_TARGET: &str = "../kafka-api/src/api.rs";
+/// Target Rust file to output Kafka ApiKeys enum
 const API_KEY_TARGET: &str = "../kafka-api/src/apikey.rs";
 
+/// Clone `REPOSITORY`, checking out the specified `VERSION`
 fn clone_repo(path: &Path) {
     let path_str = path.to_str().expect("could not convert path to string");
     println!("cloning to dir: {}", path_str);
@@ -34,8 +40,10 @@ fn clone_repo(path: &Path) {
         .expect("failed to clone repo");
 }
 
-/// Collect all schema files for the given `Path`, assuming that `path` is the root of a Kafka
-/// repository.
+/// Collects all Kafka RPC files under `SCHEMA_PATH` for the given `path` root.
+/// RequestHeader and ResponseHeader schema files are ignored, along with all non-json files.
+///
+/// Returns a collection of candidate Kafka RPC JSON files.
 fn collect_paths(path: &Path) -> Vec<PathBuf> {
     let buf = path.to_path_buf();
     let buf =
@@ -55,6 +63,8 @@ fn collect_paths(path: &Path) -> Vec<PathBuf> {
         .collect()
 }
 
+/// Parses a Kafka RPC JSON schema file into an intermediate representation suitable
+/// for manipulation and codegen.
 fn parse_schema_file(path: &Path) -> Result<schema::ParsedSchema, CodegenError> {
     let file = fs::File::open(path).expect("could not open schema file");
     let reader = io::BufReader::new(file);
@@ -70,20 +80,30 @@ fn parse_schema_file(path: &Path) -> Result<schema::ParsedSchema, CodegenError> 
     Ok(schema)
 }
 
+/// Strips the "Request" or "Response" suffix from a `name` string.
 fn strip_root_schema_type_suffix(name: &str) -> &str {
     name.trim_end_matches("Request")
         .trim_end_matches("Response")
 }
-
+/// Specification for an RPC field. Includes versioning, type and documentation information
+/// required to render the resulting field.
 #[derive(Debug, Clone)]
 pub(crate) struct RpcFieldSpec {
+    /// True if this field should be wrapped in a Vec
     pub(crate) collection: bool,
+    /// Nullability of this field
     pub(crate) nullable: bool,
+    /// Name of this RPC field
     pub(crate) field_name: String,
+    /// Type of this RPC field
     pub(crate) type_name: String,
+    /// The version where this field was added
     pub(crate) version_added: i16,
+    /// The version where this field was removed
     pub(crate) version_removed: Option<i16>,
+    /// Default value for this RPC field
     pub(crate) default: Option<String>,
+    /// Docstring for this RPC field
     pub(crate) docstring: Option<String>,
 }
 
@@ -96,6 +116,10 @@ fn sanitize(s: String) -> String {
 }
 
 impl RpcFieldSpec {
+    /// Generates an RpcFieldSpec from a ParsedSchemaField.
+    ///
+    /// If the field name starts with `[]`, it is considered to be a collection field.
+    /// The field name is converted to snake case.
     fn from_schema(field: &schema::ParsedSchemaField) -> Self {
         let collection = field.type_name.starts_with("[]");
         let nullable = field.nullable_versions.is_some();
@@ -121,6 +145,7 @@ impl RpcFieldSpec {
         }
     }
 }
+/// Representation of an RPC struct, containing zero ore more `RpcFieldSpec`.
 #[derive(Debug, Clone)]
 pub(crate) struct RpcStructSpec {
     pub(crate) struct_name: String,
@@ -129,6 +154,8 @@ pub(crate) struct RpcStructSpec {
     pub(crate) fields: Vec<RpcFieldSpec>,
 }
 
+/// Representation of a root RPC type. Contains zero or more `RpcFieldSpec`'s and any
+/// associated `RpcStructSpec`'s.
 #[derive(Debug, Clone)]
 pub(crate) struct RpcRootSpec {
     pub(crate) rpc_name: String,
@@ -141,11 +168,18 @@ pub(crate) struct RpcRootSpec {
 }
 
 impl RpcRootSpec {
+    /// Return the struct name for this root spec with the Request/Response suffix added back.
     pub(crate) fn reified_struct_name(&self) -> String {
         format!("{}{}", self.rpc_name, self.rpc_type.to_string())
     }
 }
 
+/// Recursively expand a nested Kafka RPC schema into `RpcFieldSpec`'s and `RpcStructSpec`'s.
+/// Takes a `ParsedSchemaType` and a list of fields to expand, returning `RpcFieldSpec`'s for the
+/// provided list of fields. If expansion necessitates a new struct (because the expanded field type is
+/// a struct), then the `structs` `Vec` will have the new struct added to it.
+///
+/// Returns a list of `RpcFieldSpec`'s corresponding to the provided `fields`.
 fn expand_fields(
     api_key: i16,
     rpc_type: ParsedSchemaType,
@@ -253,6 +287,6 @@ fn main() {
 
     fs::write(API_TARGET, api_file_contents.to_string()).expect("Unable to write file");
     fs::write(API_KEY_TARGET, api_key_file_contents.to_string()).expect("Unable to write file");
-    println!("generated modules")
-    //
+    println!("generated modules");
+    println!("done!");
 }
