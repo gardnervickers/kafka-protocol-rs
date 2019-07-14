@@ -1,0 +1,17 @@
+[package]
+name = "kafka-transport"
+version = "0.1.0"
+authors = ["Gardner Vickers <gardner@vickers.me>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+futures-preview = "0.3.0-alpha.16"
+pin-project = "0.3.2"
+bytes = "0.4.12"
+kafka-protocol = {path = "../kafka-protocol"}
+kafka-api = {path = "../kafka-api"}
+
+[dev-dependencies]
+futures-test-preview = "0.3.0-alpha.16"

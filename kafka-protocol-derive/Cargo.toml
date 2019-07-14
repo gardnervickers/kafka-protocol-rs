@@ -1,0 +1,25 @@
+[package]
+name = "kafka-protocol-derive"
+version = "0.1.0"
+authors = ["Gardner Vickers <gardner@vickers.me>"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+darling = "0.9"
+proc-macro2 = "0.4"
+quote = "0.6"
+
+[dependencies.syn]
+version = "0.15"
+features = ["full", "extra-traits"]
+
+[dev-dependencies]
+trybuild = "1.0"
+kafka-protocol = { path = "../kafka-protocol" }
+
+[[test]]
+name = "tests"
+path = "tests/tests.rs"

@@ -1,0 +1,25 @@
+[package]
+name = "codegen"
+version = "0.1.0"
+authors = ["Gardner Vickers <gardner@vickers.me>"]
+edition = "2018"
+
+[[bin]]
+name = "gen"
+path = "src/main.rs"
+
+[dependencies]
+failure = "0.1.5"
+failure_derive = "0.1.5"
+serde = "1.0.94"
+serde_derive = "1.0.94"
+serde_json = { version = "1.0.40", features = ["preserve_order"] }
+regex = "1.1.8"
+Inflector = "0.11.4"
+log = "0.4.6"
+simplelog = "0.6.0"
+proc-macro2 = "0.4.30"
+quote = "0.6.12"
+syn = "0.15.39"
+tempdir = "0.3.7"
+itertools = "0.8.0"
