@@ -1,5 +1,25 @@
 stages:
- - template: azure/stages.yml@templates
+ - stage: check
+   displayName: Compilation check
+   jobs:
+     - template: azure/cargo-check.yml@templates
+       parameters:
+         rust: nightly
+         name: cargo-check
+ - stage: test
+   displayName: Test suite
+   dependsOn: check
+   jobs:
+     - template: azure/tests.yml@templates
+       parameters:
+         rust: nightly
+ - stage: style
+   displayName: Style linting
+   dependsOn: check
+   jobs:
+     - template: azure/style.yml@templates
+       parameters:
+         rust: nightly
 
 resources:
   repositories:
