@@ -5,7 +5,7 @@ stages:
      - template: azure/cargo-check.yml@templates
        parameters:
          rust: nightly
-         name: cargo-check
+         name: cargo_check
  - stage: test
    displayName: Test suite
    dependsOn: check
