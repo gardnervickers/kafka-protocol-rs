@@ -26,8 +26,10 @@ stages:
        parameters:
          name: clippy
          rust: nightly
+
  - stage: coverage
    displayName: Code coverage
+   dependsOn: test
    jobs:
      - template: azure/coverage.yml@templates
        parameters:
