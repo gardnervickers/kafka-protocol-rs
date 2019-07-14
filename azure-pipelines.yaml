@@ -22,7 +22,7 @@ stages:
        parameters:
          name: rustfmt
          rust: nightly
-     - template: azure/carg-clippy.yml@templates
+     - template: azure/cargo-clippy.yml@templates
        parameters:
          name: clippy
          rust: nightly
