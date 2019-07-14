@@ -5,7 +5,7 @@ use inflector::Inflector;
 use itertools::Itertools;
 use serde_json;
 use std::cmp::Ordering;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::io::BufRead;
 use std::{
     fs, io,
@@ -234,7 +234,7 @@ fn expand_schema(schema: schema::ParsedSchema) -> RpcRootSpec {
     }
 }
 /// Group root RPC specs by the api key. Returns a map of tuples containing (request, response)
-fn group_root_specs(specs: Vec<RpcRootSpec>) -> HashMap<i16, (RpcRootSpec, RpcRootSpec)> {
+fn group_root_specs(specs: Vec<RpcRootSpec>) -> BTreeMap<i16, (RpcRootSpec, RpcRootSpec)> {
     let intermediate: HashMap<i16, Vec<RpcRootSpec>> = specs
         .into_iter()
         .map(|spec| (spec.api_key, spec))
@@ -259,7 +259,7 @@ fn group_root_specs(specs: Vec<RpcRootSpec>) -> HashMap<i16, (RpcRootSpec, RpcRo
             });
             (api_key, (specs.remove(0), specs.remove(0)))
         })
-        .collect::<HashMap<i16, (RpcRootSpec, RpcRootSpec)>>()
+        .collect::<BTreeMap<i16, (RpcRootSpec, RpcRootSpec)>>()
 }
 
 fn main() {

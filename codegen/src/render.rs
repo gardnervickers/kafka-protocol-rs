@@ -5,7 +5,7 @@ use crate::{RpcFieldSpec, RpcRootSpec, RpcStructSpec};
 use inflector::Inflector;
 use proc_macro2::TokenStream;
 use quote::{quote, ToTokens};
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use syn;
 
 impl RpcFieldSpec {
@@ -152,7 +152,7 @@ fn gen_header_imports(file_contents: &mut TokenStream) {
 
 /// Generates Rust structs for each Kafka RPC type.
 pub(crate) fn gen_api_file_contents(
-    grouped_specs: &HashMap<i16, (RpcRootSpec, RpcRootSpec)>,
+    grouped_specs: &BTreeMap<i16, (RpcRootSpec, RpcRootSpec)>,
 ) -> TokenStream {
     let mut file_contents = TokenStream::new();
     gen_header_imports(&mut file_contents);
@@ -165,7 +165,7 @@ pub(crate) fn gen_api_file_contents(
 
 /// Render an enum containing all encountered Kafka ApiKey types, useful for dispatching and logging.
 pub(crate) fn gen_api_key_file_contents(
-    grouped_specs: &HashMap<i16, (RpcRootSpec, RpcRootSpec)>,
+    grouped_specs: &BTreeMap<i16, (RpcRootSpec, RpcRootSpec)>,
 ) -> TokenStream {
     let mut file_contents = TokenStream::new();
     let mut api_key_pairs: Vec<(String, i16)> = vec![];
@@ -177,7 +177,7 @@ pub(crate) fn gen_api_key_file_contents(
 }
 
 pub(crate) fn gen_root_enums(
-    grouped_specs: &HashMap<i16, (RpcRootSpec, RpcRootSpec)>,
+    grouped_specs: &BTreeMap<i16, (RpcRootSpec, RpcRootSpec)>,
 ) -> TokenStream {
     let mut file_contents = TokenStream::new();
     let mut req_enum_variants = vec![];
@@ -217,7 +217,7 @@ fn gen_api_key_struct_ident(spec: &RpcRootSpec) -> (syn::Ident, syn::Ident) {
 }
 
 pub(crate) fn gen_root_enum_impls(
-    grouped_specs: &HashMap<i16, (RpcRootSpec, RpcRootSpec)>,
+    grouped_specs: &BTreeMap<i16, (RpcRootSpec, RpcRootSpec)>,
 ) -> TokenStream {
     let mut file_contents = TokenStream::new();
 
