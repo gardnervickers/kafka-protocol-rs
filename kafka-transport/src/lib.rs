@@ -1,5 +1,6 @@
 #![feature(async_await)]
 #![allow(dead_code, unused_variables)]
+#![allow(clippy::needless_lifetimes)]
 
 use bytes::{BigEndian, Buf, ByteOrder, BytesMut, IntoBuf};
 use futures::prelude::*;
@@ -73,7 +74,7 @@ impl<B: KafkaResponseBody + Sized> Transport<KafkaRequest, KafkaResponse<B>> {
             self.reader
                 .next()
                 .await
-                .ok_or(TransportError::broken_pipe())?
+                .ok_or_else(TransportError::broken_pipe)?
                 .map_err(TransportError::Io)?
                 .freeze()
                 .into_buf()
@@ -92,7 +93,7 @@ impl<B: KafkaResponseBody + Sized> Transport<KafkaResponse<B>, KafkaRequest> {
             .reader
             .next()
             .await
-            .ok_or(TransportError::broken_pipe())?
+            .ok_or_else(TransportError::broken_pipe)?
             .map_err(TransportError::Io)?;
         KafkaResponse::read(response_buf.freeze().into_buf().reader(), api_version)
             .map_err(error::TransportError::Codec)
@@ -133,7 +134,7 @@ impl ClientTransport {
             .reader
             .next()
             .await
-            .ok_or(TransportError::broken_pipe())?
+            .ok_or_else(TransportError::broken_pipe)?
             .map_err(TransportError::Io)?;
         let response_buf_reader = response_buf.freeze().into_buf().reader();
         let mut ctx = kafka_protocol::DeserializeCtx::new(response_buf_reader, api_version);
