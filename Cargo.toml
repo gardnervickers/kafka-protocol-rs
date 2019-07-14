@@ -1,2 +1,5 @@
+[badges]
+azure-devops = { project = "AZURE_USER/AZURE_PROJECT", pipeline = "gardner-CI", build = "1" }
+
 [workspace]
 members = ["kafka-protocol", "kafka-protocol-derive", "codegen", "kafka-api", "kafka-transport"]
