@@ -1,4 +1,5 @@
-# What is this?
+[![Build Status](https://gardnervickers.visualstudio.com/gardner/_apis/build/status/gardner-CI?branchName=master)](https://gardnervickers.visualstudio.com/gardner/_build/latest?definitionId=1&branchName=master)
+
 
 A collection of crates for working with the [Kafka protocol](https://kafka.apache.org/protocol). 
 The Kafka protocol is a request/response orientated binary protocol. It consists
