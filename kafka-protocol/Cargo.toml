@@ -1,8 +1,9 @@
 [package]
 name = "kafka-protocol"
-version = "0.1.0"
+version = "0.0.1"
 authors = ["Gardner Vickers <gardner@vickers.me>"]
 edition = "2018"
+repository = "https://github.com/gardnervickers/kafka-protocol-rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -12,7 +13,7 @@ byteorder = "1.3.2"
 [dev-dependencies]
 criterion = "0.2.11"
 bytes = "0.4"
-kafka-protocol-derive = {path = "../kafka-protocol-derive"}
+kafka-protocol-derive = {version = "=0.0.1", path = "../kafka-protocol-derive"}
 proptest = "0.9"
 proptest-derive = "0.1.2"
 

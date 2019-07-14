@@ -36,8 +36,6 @@ use core::{
 };
 use futures::{prelude::*, ready};
 
-
-
 use pin_project::unsafe_project;
 
 const INITIAL_CAPACITY: usize = 8 * 1024;

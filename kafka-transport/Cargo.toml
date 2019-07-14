@@ -1,8 +1,9 @@
 [package]
 name = "kafka-transport"
-version = "0.1.0"
+version = "0.0.1"
 authors = ["Gardner Vickers <gardner@vickers.me>"]
 edition = "2018"
+repository = "https://github.com/gardnervickers/kafka-protocol-rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -10,8 +11,8 @@ edition = "2018"
 futures-preview = "0.3.0-alpha.16"
 pin-project = "0.3.2"
 bytes = "0.4.12"
-kafka-protocol = {path = "../kafka-protocol"}
-kafka-api = {path = "../kafka-api"}
+kafka-protocol = {version = "=0.0.1", path = "../kafka-protocol"}
+kafka-api = {version = "0.0.1", path = "../kafka-api"}
 
 [dev-dependencies]
 futures-test-preview = "0.3.0-alpha.16"
