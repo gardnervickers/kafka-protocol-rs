@@ -10,15 +10,21 @@ stages:
    displayName: Test suite
    dependsOn: check
    jobs:
-     - template: azure/tests.yml@templates
+     - template: azure/test.yml@templates
        parameters:
          rust: nightly
+
  - stage: style
    displayName: Style linting
    dependsOn: check
    jobs:
-     - template: azure/style.yml@templates
+     - template: azure/rustfmt.yml@templates
        parameters:
+         name: rustfmt
+         rust: nightly
+     - template: azure/carg-clippy.yml@templates
+       parameters:
+         name: clippy
          rust: nightly
 
 resources:
