@@ -27,34 +27,6 @@ stages:
          name: clippy
          rust: nightly
 
- - stage: coverage
-   displayName: Code coverage
-   dependsOn: test
-   jobs:
-    - job: tarpaulin
-      displayName: tarpaulin
-      pool:
-         vmImage: ubuntu-16.04
-      container:
-        image: xd009642/tarpaulin:develop-nightly
-        options: --security-opt seccomp=unconfined
-      steps:
-        - script: "if [[ -n $CHECK ]] && [[ ! $CHECK == '$('* ]]; then echo '##vso[task.setvariable variable=has_secret]true'; else echo '##vso[task.setvariable variable=has_secret]false'; fi"
-          name: secret_check
-          displayName: Check for codecov token
-          env:
-            CHECK: $(CODECOV_TOKEN_SECRET)
-        - script: cargo tarpaulin --out Xml
-          displayName: Run tarpaulin
-          condition: and(succeeded(), eq(variables.has_secret, 'true'))
-        - script: bash <(curl -s https://codecov.io/bash)
-          displayName: Upload results to codecov
-          condition: and(succeeded(), eq(variables.has_secret, 'true'))
-          env:
-            CODECOV_TOKEN: $(CODECOV_TOKEN_SECRET)   
-        - template: azure/coverage.yml@templates
-
-
 resources:
   repositories:
     - repository: templates
