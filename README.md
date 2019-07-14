@@ -1,4 +1,5 @@
 [![Build Status](https://gardnervickers.visualstudio.com/gardner/_apis/build/status/gardner-CI?branchName=master)](https://gardnervickers.visualstudio.com/gardner/_build/latest?definitionId=1&branchName=master)
+[![codecov](https://codecov.io/gh/gardnervickers/kafka-protocol-rs/branch/master/graph/badge.svg)](https://codecov.io/gh/gardnervickers/kafka-protocol-rs)
 
 ### Supported Kafka version `2.2.1`
 
