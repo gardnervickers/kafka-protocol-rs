@@ -26,6 +26,13 @@ stages:
        parameters:
          name: clippy
          rust: nightly
+ - stage: coverage
+   displayName: Code coverage
+   jobs:
+     - template: azure/coverage.yml@templates
+       parameters:
+         rust: nightly
+         codecov_token: $(CODECOV_TOKEN_SECRET)
 
 resources:
   repositories:
