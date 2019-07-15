@@ -113,6 +113,16 @@ impl KafkaResponse {
         Ok(KafkaResponse::new(api_version, correlation_id, body))
     }
 
+    pub fn read2<R: io::Read, B: Into<api::ResponseBody> + KafkaRpcType>(
+        reader: R,
+        api_version: i16,
+    ) -> Result<Self, CodecError> {
+        let mut ctx: DeserializeCtx<R> = DeserializeCtx::new(reader, api_version);
+        let correlation_id: i32 = KafkaRpcType::read(&mut ctx)?;
+        let body = B::read(&mut ctx)?;
+        Ok(KafkaResponse::new(api_version, correlation_id, body.into()))
+    }
+
     pub fn size(&self) -> usize {
         self.correlation_id.size(self.api_version) + self.body.size(self.api_version)
     }

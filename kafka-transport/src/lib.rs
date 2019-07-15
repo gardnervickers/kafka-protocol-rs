@@ -102,6 +102,22 @@ impl Transport<KafkaResponse, KafkaRequest> {
         .map_err(error::TransportError::Codec)
     }
 
+    async fn read_response2<
+        B: Into<kafka_api::api::ResponseBody> + kafka_protocol::KafkaRpcType,
+    >(
+        &mut self,
+        api_version: i16,
+    ) -> Result<KafkaResponse, error::TransportError> {
+        let response_buf: BytesMut = self
+            .reader
+            .next()
+            .await
+            .ok_or_else(TransportError::broken_pipe)?
+            .map_err(TransportError::Io)?;
+        KafkaResponse::read2::<_, B>(response_buf.freeze().into_buf().reader(), api_version)
+            .map_err(error::TransportError::Codec)
+    }
+
     async fn write_request(&mut self, request: KafkaRequest) -> Result<(), error::TransportError> {
         let request_size: usize = request.size();
         let mut buf: Vec<u8> = Vec::with_capacity(request_size + 4);
@@ -214,7 +230,7 @@ mod tests {
             .await
             .expect("failed to write request");
         let response = client
-            .read_response(ApiKeys::Metadata, api_version)
+            .read_response2::<kafka_api::api::MetadataResponse>(api_version)
             .await
             .expect("could not read response");
         assert_eq!(correlation_id, response.correlation_id);
@@ -269,17 +285,17 @@ mod tests {
             .expect("failed to write request");
 
         let resp = client
-            .read_response(ApiKeys::Metadata, 1)
+            .read_response2::<MetadataResponse>(1)
             .await
             .expect("expected to read response");
         assert_eq!(resp.correlation_id, 1);
         let resp = client
-            .read_response(ApiKeys::Metadata, 1)
+            .read_response2::<MetadataResponse>(1)
             .await
             .expect("expected to read response");
         assert_eq!(resp.correlation_id, 2);
         let resp = client
-            .read_response(ApiKeys::Metadata, 1)
+            .read_response2::<MetadataResponse>(1)
             .await
             .expect("expected to read response");
         assert_eq!(resp.correlation_id, 3);
