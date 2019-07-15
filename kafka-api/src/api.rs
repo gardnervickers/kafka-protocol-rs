@@ -1,4 +1,5 @@
-# ! [ allow ( dead_code ) ]use from_variants::FromVariants;
+#![allow(dead_code)]
+use from_variants::FromVariants;
 use kafka_protocol::KafkaRpcType;
 use kafka_protocol_derive::KafkaRpc;
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]

@@ -3,9 +3,11 @@
 //! The [Kafka Protocol](https://kafka.apache.org/protocol) does not include API type or version
 //! information in responses. Because of this, clients must always supply an `api_type` and `api_version`
 //! when decoding responses.
+use crate::apikey::ApiKeys;
 pub use kafka_protocol::{CodecError, KafkaRpc, KafkaRpcType};
 use kafka_protocol::{DeserializeCtx, SerializeCtx};
 use std::io;
+
 pub mod api;
 pub mod apikey;
 pub mod errors;
@@ -29,10 +31,10 @@ pub struct KafkaRequest {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct KafkaResponse<B: KafkaResponseBody + Sized> {
+pub struct KafkaResponse {
     pub api_version: i16,
     pub correlation_id: i32,
-    pub body: B,
+    pub body: api::ResponseBody,
 }
 
 impl KafkaRequest {
@@ -74,25 +76,25 @@ impl KafkaRequest {
         Ok(())
     }
 
-    pub fn new<C: Into<String> + Sized>(
+    pub fn new<C: Into<String> + Sized, B: Into<api::RequestBody> + Sized>(
         api_key: apikey::ApiKeys,
         api_version: i16,
         correlation_id: i32,
         client_id: C,
-        body: api::RequestBody,
+        body: B,
     ) -> Self {
         Self {
             api_key,
             api_version,
             correlation_id,
             client_id: client_id.into(),
-            body,
+            body: body.into(),
         }
     }
 }
 
-impl<B: KafkaResponseBody + Sized> KafkaResponse<B> {
-    pub fn new(api_version: i16, correlation_id: i32, body: B) -> Self {
+impl KafkaResponse {
+    pub fn new(api_version: i16, correlation_id: i32, body: api::ResponseBody) -> Self {
         Self {
             api_version,
             correlation_id,
@@ -100,15 +102,15 @@ impl<B: KafkaResponseBody + Sized> KafkaResponse<B> {
         }
     }
 
-    pub fn read<R: io::Read>(reader: R, api_version: i16) -> Result<Self, CodecError> {
+    pub fn read<R: io::Read>(
+        reader: R,
+        api_key: ApiKeys,
+        api_version: i16,
+    ) -> Result<Self, CodecError> {
         let mut ctx: DeserializeCtx<R> = DeserializeCtx::new(reader, api_version);
         let correlation_id: i32 = KafkaRpcType::read(&mut ctx)?;
-        let body = B::read(&mut ctx)?;
-        Ok(Self {
-            api_version,
-            correlation_id,
-            body,
-        })
+        let body = api::ResponseBody::read(&mut ctx, api_key.into())?;
+        Ok(KafkaResponse::new(api_version, correlation_id, body))
     }
 
     pub fn size(&self) -> usize {
