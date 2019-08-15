@@ -5,7 +5,7 @@ authors = ["Gardner Vickers <gardner@vickers.me>"]
 edition = "2018"
 
 [[bin]]
-name = "gen"
+name = "codegen"
 path = "src/main.rs"
 
 [dependencies]

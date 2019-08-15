@@ -1,5 +1,5 @@
 #![recursion_limit = "128"]
-#![feature(async_await)]
+#![feature(async_await, async_closure)]
 #![allow(dead_code, unused_variables)]
 #![allow(clippy::needless_lifetimes)]
 
@@ -13,6 +13,7 @@ use std::marker::PhantomData;
 
 mod error;
 pub mod frame;
+mod media;
 
 pub struct Transport<In, Out> {
     reader: Box<dyn Stream<Item = Result<BytesMut, std::io::Error>> + Unpin + Sync + Send>,
@@ -145,8 +146,9 @@ mod tests {
         MetadataRequest, MetadataRequestTopic, MetadataResponse, MetadataResponseBroker,
         MetadataResponsePartition, MetadataResponseTopic, RequestBody, ResponseBody,
     };
-    use memsocket::MemorySocket;
-    use runtime;
+    use media::mem;
+    use futures::executor::{block_on};
+    use futures_test::future::FutureTestExt;
 
     /// Create a mock metadata server which responds to metadata requests with a fixed metadata response.
     async fn metadata_server(
@@ -154,10 +156,13 @@ mod tests {
         shutdown: futures::channel::oneshot::Receiver<()>,
     ) {
         let mut cancel = shutdown.fuse();
-
         loop {
             let mut handle = async {
-                let request = transport.read_request().await.unwrap();
+                let request_res = transport.read_request().await;
+                if request_res.is_err() {
+                    return
+                }
+                let request = request_res.expect("");
                 assert_eq!(request.api_key, ApiKeys::Metadata);
                 let body = ResponseBody::MetadataResponse(MetadataResponse {
                     throttle_time_ms: 20,
@@ -196,19 +201,23 @@ mod tests {
 
             select! {
               request = handle => {} // continue
-              _ = cancel => { return; } // cancellation recieved, exit.
+              _ = cancel => { return } // cancellation received, exit.
             }
         }
     }
 
-    #[runtime::test]
+    #[test]
+    fn test_request_response() {
+        block_on(request_response());
+    }
+
     async fn request_response() {
-        let (c, s) = MemorySocket::new_pair();
+        let (c, s) = mem::MemorySocket::new_pair();
         let server = new_server_transport(s);
         let mut client = new_client_transport(c);
         let (shutdown_tx, shutdown_rx) = futures::channel::oneshot::channel::<()>();
-        let metadata_server_join_handle =
-            runtime::task::spawn(metadata_server(server, shutdown_rx));
+
+        metadata_server(server, shutdown_rx).run_in_background();
 
         let metadata_request_body = RequestBody::MetadataRequest(MetadataRequest {
             topics: Some(vec![MetadataRequestTopic {
@@ -242,17 +251,19 @@ mod tests {
         }
 
         shutdown_tx.send(()).expect("shutdown initiated");
-        metadata_server_join_handle.await;
     }
 
-    #[runtime::test]
+    #[test]
+    fn test_multiple_requests() {
+        block_on(multiple_requests());
+    }
+
     async fn multiple_requests() {
-        let (c, s) = MemorySocket::new_pair();
+        let (c, s) = mem::MemorySocket::new_pair();
         let server = new_server_transport(s);
         let mut client = new_client_transport(c);
         let (shutdown_tx, shutdown_rx) = futures::channel::oneshot::channel::<()>();
-        let metadata_server_join_handle =
-            runtime::task::spawn(metadata_server(server, shutdown_rx));
+        metadata_server(server, shutdown_rx).run_in_background();
 
         fn new_metadata_request(correlation_id: i32) -> KafkaRequest {
             let metadata_request_body = RequestBody::MetadataRequest(MetadataRequest {
@@ -301,6 +312,5 @@ mod tests {
         assert_eq!(resp.correlation_id, 3);
 
         shutdown_tx.send(()).expect("shutdown initiated");
-        metadata_server_join_handle.await;
     }
 }

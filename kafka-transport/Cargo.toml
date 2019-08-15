@@ -13,8 +13,7 @@ pin-project = "0.3.2"
 bytes = "0.4.12"
 kafka-protocol = {version = "=0.0.1", path = "../kafka-protocol"}
 kafka-api = {version = "0.0.1", path = "../kafka-api"}
-runtime = "0.3.0-alpha.6"
+
 
 [dev-dependencies]
 futures-test-preview = "0.3.0-alpha.16"
-memsocket = {git = "https://github.com/libra/libra", version = "0.1.0"}

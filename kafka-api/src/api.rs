@@ -2,6 +2,7 @@
 use from_variants::FromVariants;
 use kafka_protocol::KafkaRpcType;
 use kafka_protocol_derive::KafkaRpc;
+
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
 #[kafka(added = 0i16, removed = 7i16)]
 pub struct ProduceRequest {

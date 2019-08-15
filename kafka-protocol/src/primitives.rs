@@ -242,9 +242,9 @@ impl KafkaRpcType for Vec<u8> {
                 "length for Vec<u8> was < 0",
             )))
         } else if len == 0 {
-            Ok(Vec::with_capacity(0))
+            Ok(vec![])
         } else {
-            let mut result = Vec::with_capacity(len as usize);
+            let mut result = vec![0; len as usize];
             ctx.reader.read_exact(&mut result).map_err(CodecError::Io)?;
             Ok(result)
         }
@@ -272,7 +272,7 @@ impl KafkaRpcType for Option<Vec<u8>> {
                 "length for Option<Vec<u8>> was < -1",
             )))
         } else {
-            let mut result = Vec::with_capacity(len as usize);
+            let mut result = vec![0; len as usize];
             ctx.reader.read_exact(&mut result).map_err(CodecError::Io)?;
             Ok(Some(result))
         }
@@ -291,6 +291,8 @@ impl KafkaRpcType for Option<Vec<u8>> {
                 KafkaRpcType::write(&(-1 as i32), ctx)?;
             }
             Some(inner) => {
+                let len = inner.len();
+                KafkaRpcType::write(&(len as i32), ctx)?;
                 ctx.writer.write_all(&inner[..]).map_err(CodecError::Io)?;
             }
         };
@@ -305,6 +307,14 @@ mod tests {
     use proptest::test_runner::{Config, TestRunner};
     use std::fmt::Debug;
     use std::io::Cursor;
+
+    fn prop_config() -> Config {
+        Config::with_source_file("src/primitives.rs")
+    }
+
+    fn prop_config_with_cases(num_cases: u32) -> Config {
+        Config::with_cases(num_cases).clone_with_source_file("src/primitives.rs")
+    }
 
     fn round_trip<T: KafkaRpcType + PartialEq + Debug>(input: &T) -> Result<T, CodecError> {
         let size = input.size(0);
@@ -323,63 +333,90 @@ mod tests {
         let result = round_trip(&input);
         prop_assert!(result.is_ok());
         let unwrapped = result.unwrap();
+
         prop_assert_eq!(input, unwrapped);
         Ok(())
     }
 
     #[test]
     fn check_numerics() {
-        TestRunner::new(Config::default())
+        TestRunner::new(prop_config())
             .run(&(any::<bool>()), check_round_trip)
             .unwrap();
 
-        TestRunner::new(Config::default())
+        TestRunner::new(prop_config())
             .run(&(any::<i8>()), check_round_trip)
             .unwrap();
 
-        TestRunner::new(Config::default())
+        TestRunner::new(prop_config())
             .run(&(any::<i16>()), check_round_trip)
             .unwrap();
 
-        TestRunner::new(Config::default())
+        TestRunner::new(prop_config())
             .run(&(any::<i32>()), check_round_trip)
             .unwrap();
 
-        TestRunner::new(Config::default())
+        TestRunner::new(prop_config())
             .run(&(any::<i64>()), check_round_trip)
             .unwrap();
     }
 
     #[test]
     fn check_optional_types() {
-        TestRunner::new(Config::default())
+        TestRunner::new(prop_config())
             .run(&(any::<Option<String>>()), check_round_trip)
             .unwrap();
 
-        TestRunner::new(Config::default())
+        TestRunner::new(prop_config())
             .run(&(any::<Option<Vec<i32>>>()), check_round_trip)
             .unwrap();
     }
 
     #[test]
     fn check_variable_sized_types() {
-        TestRunner::new(Config::default())
+        TestRunner::new(prop_config())
             .run(&(any::<String>()), check_round_trip)
             .unwrap();
 
-        TestRunner::new(Config::default())
+        TestRunner::new(prop_config())
             .run(&(any::<Vec<i32>>()), check_round_trip)
             .unwrap();
     }
 
     #[test]
     fn check_nested_types() {
-        TestRunner::new(Config::with_cases(10))
+        TestRunner::new(prop_config_with_cases(100))
             .run(&(any::<Vec<Vec<i8>>>()), check_round_trip)
             .unwrap();
 
-        TestRunner::new(Config::with_cases(10))
+        TestRunner::new(prop_config_with_cases(100))
             .run(&(any::<Vec<Option<String>>>()), check_round_trip)
             .unwrap();
+
+        TestRunner::new(prop_config_with_cases(100))
+            .run(&(any::<Vec<u8>>()), check_round_trip)
+            .unwrap();
+
+        TestRunner::new(prop_config_with_cases(100))
+            .run(&(any::<Option<Vec<u8>>>()), check_round_trip)
+            .unwrap();
+    }
+
+    #[test]
+    fn test_failure1() {
+        let input = vec![b'f', b'o', b'o'];
+        check_round_trip(input).unwrap();
+    }
+
+    #[test]
+    fn test_failure2() {
+        let input: Vec<u8> = vec![];
+        check_round_trip(Some(input)).unwrap();
+    }
+
+    #[test]
+    fn test_failure3() {
+        let input: Vec<u8> = vec![25];
+        check_round_trip(Some(input)).unwrap();
     }
 }
