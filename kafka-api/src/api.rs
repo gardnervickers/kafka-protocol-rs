@@ -1,10 +1,9 @@
-#![allow(dead_code)]
+# ! [ allow ( dead_code ) ]use crate::AsApiVersionsResponseKey;
 use from_variants::FromVariants;
 use kafka_protocol::KafkaRpcType;
 use kafka_protocol_derive::KafkaRpc;
-
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 7i16)]
+#[kafka(apikey = 0i16, added = 0i16, removed = 7i16)]
 pub struct ProduceRequest {
     #[doc = "The transactional ID, or null if the producer is not transactional."]
     #[kafka(added = 3i16)]
@@ -43,7 +42,7 @@ pub struct TopicProduceData {
     pub partitions: Vec<PartitionProduceData>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 7i16)]
+#[kafka(apikey = 0i16, added = 0i16, removed = 7i16)]
 pub struct ProduceResponse {
     #[doc = "Each produce response"]
     #[kafka(added = 0i16)]
@@ -85,7 +84,7 @@ pub struct TopicProduceResponse {
     pub partitions: Vec<PartitionProduceResponse>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 10i16)]
+#[kafka(apikey = 1i16, added = 0i16, removed = 10i16)]
 pub struct FetchRequest {
     #[doc = "The broker ID of the follower, of -1 if this request is from a consumer."]
     #[kafka(added = 0i16)]
@@ -157,7 +156,7 @@ pub struct ForgottenTopic {
     pub forgotten_partition_indexes: Vec<i32>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 10i16)]
+#[kafka(apikey = 1i16, added = 0i16, removed = 10i16)]
 pub struct FetchResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 1i16)]
@@ -220,7 +219,7 @@ pub struct FetchableTopicResponse {
     pub partitions: Vec<FetchablePartitionResponse>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 5i16)]
+#[kafka(apikey = 2i16, added = 0i16, removed = 5i16)]
 pub struct ListOffsetRequest {
     #[doc = "The broker ID of the requestor, or -1 if this request is being made by a normal consumer."]
     #[kafka(added = 0i16)]
@@ -262,7 +261,7 @@ pub struct ListOffsetTopic {
     pub partitions: Vec<ListOffsetPartition>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 5i16)]
+#[kafka(apikey = 2i16, added = 0i16, removed = 5i16)]
 pub struct ListOffsetResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 2i16)]
@@ -306,7 +305,7 @@ pub struct ListOffsetTopicResponse {
     pub partitions: Vec<ListOffsetPartitionResponse>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 7i16)]
+#[kafka(apikey = 3i16, added = 0i16, removed = 7i16)]
 pub struct MetadataRequest {
     #[doc = "The topics to fetch metadata for."]
     #[kafka(added = 0i16)]
@@ -327,7 +326,7 @@ pub struct MetadataRequestTopic {
     pub name: String,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 7i16)]
+#[kafka(apikey = 3i16, added = 0i16, removed = 7i16)]
 pub struct MetadataResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 3i16)]
@@ -405,7 +404,7 @@ pub struct MetadataResponseTopic {
     pub partitions: Vec<MetadataResponsePartition>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 4i16, added = 0i16, removed = 2i16)]
 pub struct LeaderAndIsrRequest {
     #[doc = "The current controller ID."]
     #[kafka(added = 0i16)]
@@ -510,7 +509,7 @@ pub struct LeaderAndIsrLiveLeader {
     pub port: i32,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 4i16, added = 0i16, removed = 2i16)]
 pub struct LeaderAndIsrResponse {
     #[doc = "The error code, or 0 if there was no error."]
     #[kafka(added = 0i16)]
@@ -537,7 +536,7 @@ pub struct LeaderAndIsrResponsePartition {
     pub error_code: i16,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 5i16, added = 0i16, removed = 1i16)]
 pub struct StopReplicaRequest {
     #[doc = "The controller id."]
     #[kafka(added = 0i16)]
@@ -582,7 +581,7 @@ pub struct StopReplicaRequestTopic {
     pub partition_indexes: Vec<i32>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 5i16, added = 0i16, removed = 1i16)]
 pub struct StopReplicaResponse {
     #[doc = "The top-level error code, or 0 if there was no top-level error."]
     #[kafka(added = 0i16)]
@@ -609,7 +608,7 @@ pub struct StopReplicaResponsePartition {
     pub error_code: i16,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 5i16)]
+#[kafka(apikey = 6i16, added = 0i16, removed = 5i16)]
 pub struct UpdateMetadataRequest {
     #[doc = "The controller id."]
     #[kafka(added = 0i16)]
@@ -733,7 +732,7 @@ pub struct UpdateMetadataRequestBroker {
     pub rack: Option<String>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 5i16)]
+#[kafka(apikey = 6i16, added = 0i16, removed = 5i16)]
 pub struct UpdateMetadataResponse {
     #[doc = "The error code, or 0 if there was no error."]
     #[kafka(added = 0i16)]
@@ -745,7 +744,7 @@ impl crate::KafkaResponseBody for UpdateMetadataResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 7i16, added = 0i16, removed = 2i16)]
 pub struct ControlledShutdownRequest {
     #[doc = "The id of the broker for which controlled shutdown has been requested."]
     #[kafka(added = 0i16)]
@@ -760,7 +759,7 @@ impl crate::KafkaRequestBody for ControlledShutdownRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 7i16, added = 0i16, removed = 2i16)]
 pub struct ControlledShutdownResponse {
     #[doc = "The top-level error code."]
     #[kafka(added = 0i16)]
@@ -784,7 +783,7 @@ pub struct RemainingPartition {
     pub partition_index: i32,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 6i16)]
+#[kafka(apikey = 8i16, added = 0i16, removed = 6i16)]
 pub struct OffsetCommitRequest {
     #[doc = "The unique group identifier."]
     #[kafka(added = 0i16)]
@@ -835,7 +834,7 @@ pub struct OffsetCommitRequestTopic {
     pub partitions: Vec<OffsetCommitRequestPartition>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 6i16)]
+#[kafka(apikey = 8i16, added = 0i16, removed = 6i16)]
 pub struct OffsetCommitResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 3i16)]
@@ -868,7 +867,7 @@ pub struct OffsetCommitResponseTopic {
     pub partitions: Vec<OffsetCommitResponsePartition>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 5i16)]
+#[kafka(apikey = 9i16, added = 0i16, removed = 5i16)]
 pub struct OffsetFetchRequest {
     #[doc = "The group to fetch offsets for."]
     #[kafka(added = 0i16)]
@@ -891,7 +890,7 @@ pub struct OffsetFetchRequestTopic {
     pub partition_indexes: Vec<i32>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 5i16)]
+#[kafka(apikey = 9i16, added = 0i16, removed = 5i16)]
 pub struct OffsetFetchResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 3i16)]
@@ -936,7 +935,7 @@ pub struct OffsetFetchResponseTopic {
     pub partitions: Vec<OffsetFetchResponsePartition>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 10i16, added = 0i16, removed = 2i16)]
 pub struct FindCoordinatorRequest {
     #[doc = "The coordinator key."]
     #[kafka(added = 0i16)]
@@ -951,7 +950,7 @@ impl crate::KafkaRequestBody for FindCoordinatorRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 10i16, added = 0i16, removed = 2i16)]
 pub struct FindCoordinatorResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 1i16)]
@@ -978,7 +977,7 @@ impl crate::KafkaResponseBody for FindCoordinatorResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 4i16)]
+#[kafka(apikey = 11i16, added = 0i16, removed = 4i16)]
 pub struct JoinGroupRequest {
     #[doc = "The group identifier."]
     #[kafka(added = 0i16)]
@@ -1014,7 +1013,7 @@ pub struct JoinGroupRequestProtocol {
     pub metadata: Vec<u8>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 4i16)]
+#[kafka(apikey = 11i16, added = 0i16, removed = 4i16)]
 pub struct JoinGroupResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 2i16)]
@@ -1052,7 +1051,7 @@ pub struct JoinGroupResponseMember {
     pub metadata: Vec<u8>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 12i16, added = 0i16, removed = 2i16)]
 pub struct HeartbeatRequest {
     #[doc = "The group id."]
     #[kafka(added = 0i16)]
@@ -1070,7 +1069,7 @@ impl crate::KafkaRequestBody for HeartbeatRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 12i16, added = 0i16, removed = 2i16)]
 pub struct HeartbeatResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 1i16)]
@@ -1085,7 +1084,7 @@ impl crate::KafkaResponseBody for HeartbeatResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 13i16, added = 0i16, removed = 2i16)]
 pub struct LeaveGroupRequest {
     #[doc = "The ID of the group to leave."]
     #[kafka(added = 0i16)]
@@ -1100,7 +1099,7 @@ impl crate::KafkaRequestBody for LeaveGroupRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 13i16, added = 0i16, removed = 2i16)]
 pub struct LeaveGroupResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 1i16)]
@@ -1115,7 +1114,7 @@ impl crate::KafkaResponseBody for LeaveGroupResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 14i16, added = 0i16, removed = 2i16)]
 pub struct SyncGroupRequest {
     #[doc = "The unique group identifier."]
     #[kafka(added = 0i16)]
@@ -1145,7 +1144,7 @@ pub struct SyncGroupRequestAssignment {
     pub assignment: Vec<u8>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 14i16, added = 0i16, removed = 2i16)]
 pub struct SyncGroupResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 1i16)]
@@ -1163,7 +1162,7 @@ impl crate::KafkaResponseBody for SyncGroupResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 15i16, added = 0i16, removed = 2i16)]
 pub struct DescribeGroupsRequest {
     #[doc = "The names of the groups to describe"]
     #[kafka(added = 0i16)]
@@ -1175,7 +1174,7 @@ impl crate::KafkaRequestBody for DescribeGroupsRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 15i16, added = 0i16, removed = 2i16)]
 pub struct DescribeGroupsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 1i16)]
@@ -1229,7 +1228,7 @@ pub struct DescribedGroup {
     pub members: Vec<DescribedGroupMember>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 16i16, added = 0i16, removed = 2i16)]
 pub struct ListGroupsRequest {}
 impl crate::KafkaRequestBody for ListGroupsRequest {
     fn api_key() -> crate::apikey::ApiKeys {
@@ -1237,7 +1236,7 @@ impl crate::KafkaRequestBody for ListGroupsRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 16i16, added = 0i16, removed = 2i16)]
 pub struct ListGroupsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 1i16)]
@@ -1264,7 +1263,7 @@ pub struct ListedGroup {
     pub protocol_type: String,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 17i16, added = 0i16, removed = 1i16)]
 pub struct SaslHandshakeRequest {
     #[doc = "The SASL mechanism chosen by the client."]
     #[kafka(added = 0i16)]
@@ -1276,7 +1275,7 @@ impl crate::KafkaRequestBody for SaslHandshakeRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 17i16, added = 0i16, removed = 1i16)]
 pub struct SaslHandshakeResponse {
     #[doc = "The error code, or 0 if there was no error."]
     #[kafka(added = 0i16)]
@@ -1291,7 +1290,7 @@ impl crate::KafkaResponseBody for SaslHandshakeResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 18i16, added = 0i16, removed = 2i16)]
 pub struct ApiVersionsRequest {}
 impl crate::KafkaRequestBody for ApiVersionsRequest {
     fn api_key() -> crate::apikey::ApiKeys {
@@ -1299,7 +1298,7 @@ impl crate::KafkaRequestBody for ApiVersionsRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 18i16, added = 0i16, removed = 2i16)]
 pub struct ApiVersionsResponse {
     #[doc = "The top-level error code."]
     #[kafka(added = 0i16)]
@@ -1329,7 +1328,7 @@ pub struct ApiVersionsResponseKey {
     pub max_version: i16,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 3i16)]
+#[kafka(apikey = 19i16, added = 0i16, removed = 3i16)]
 pub struct CreateTopicsRequest {
     #[doc = "The topics to create."]
     #[kafka(added = 0i16)]
@@ -1383,7 +1382,7 @@ pub struct CreatableTopic {
     pub configs: Vec<CreateableTopicConfig>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 3i16)]
+#[kafka(apikey = 19i16, added = 0i16, removed = 3i16)]
 pub struct CreateTopicsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 2i16)]
@@ -1410,7 +1409,7 @@ pub struct CreatableTopicResult {
     pub error_message: Option<String>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 3i16)]
+#[kafka(apikey = 20i16, added = 0i16, removed = 3i16)]
 pub struct DeleteTopicsRequest {
     #[doc = "The names of the topics to delete"]
     #[kafka(added = 0i16)]
@@ -1425,7 +1424,7 @@ impl crate::KafkaRequestBody for DeleteTopicsRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 3i16)]
+#[kafka(apikey = 20i16, added = 0i16, removed = 3i16)]
 pub struct DeleteTopicsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 1i16)]
@@ -1449,7 +1448,7 @@ pub struct DeletableTopicResult {
     pub error_code: i16,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 21i16, added = 0i16, removed = 1i16)]
 pub struct DeleteRecordsRequest {
     #[doc = "Each topic that we want to delete records from."]
     #[kafka(added = 0i16)]
@@ -1482,7 +1481,7 @@ pub struct DeleteRecordsTopic {
     pub partitions: Vec<DeleteRecordsPartition>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 21i16, added = 0i16, removed = 1i16)]
 pub struct DeleteRecordsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -1518,7 +1517,7 @@ pub struct DeleteRecordsTopicResult {
     pub partitions: Vec<DeleteRecordsPartitionResult>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 22i16, added = 0i16, removed = 1i16)]
 pub struct InitProducerIdRequest {
     #[doc = "The transactional id, or null if the producer is not transactional."]
     #[kafka(added = 0i16)]
@@ -1533,7 +1532,7 @@ impl crate::KafkaRequestBody for InitProducerIdRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 22i16, added = 0i16, removed = 1i16)]
 pub struct InitProducerIdResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -1554,7 +1553,7 @@ impl crate::KafkaResponseBody for InitProducerIdResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 23i16, added = 0i16, removed = 2i16)]
 pub struct OffsetForLeaderEpochRequest {
     #[doc = "Each topic to get offsets for."]
     #[kafka(added = 0i16)]
@@ -1587,7 +1586,7 @@ pub struct OffsetForLeaderTopic {
     pub partitions: Vec<OffsetForLeaderPartition>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 23i16, added = 0i16, removed = 2i16)]
 pub struct OffsetForLeaderEpochResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 2i16)]
@@ -1626,7 +1625,7 @@ pub struct OffsetForLeaderTopicResult {
     pub partitions: Vec<OffsetForLeaderPartitionResult>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 24i16, added = 0i16, removed = 1i16)]
 pub struct AddPartitionsToTxnRequest {
     #[doc = "The transactional id corresponding to the transaction."]
     #[kafka(added = 0i16)]
@@ -1656,7 +1655,7 @@ pub struct AddPartitionsToTxnTopic {
     pub partitions: Vec<i32>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 24i16, added = 0i16, removed = 1i16)]
 pub struct AddPartitionsToTxnResponse {
     #[doc = "Duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -1689,7 +1688,7 @@ pub struct AddPartitionsToTxnTopicResult {
     pub results: Vec<AddPartitionsToTxnPartitionResult>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 25i16, added = 0i16, removed = 1i16)]
 pub struct AddOffsetsToTxnRequest {
     #[doc = "The transactional id corresponding to the transaction."]
     #[kafka(added = 0i16)]
@@ -1710,7 +1709,7 @@ impl crate::KafkaRequestBody for AddOffsetsToTxnRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 25i16, added = 0i16, removed = 1i16)]
 pub struct AddOffsetsToTxnResponse {
     #[doc = "Duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -1725,7 +1724,7 @@ impl crate::KafkaResponseBody for AddOffsetsToTxnResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 26i16, added = 0i16, removed = 1i16)]
 pub struct EndTxnRequest {
     #[doc = "The ID of the transaction to end."]
     #[kafka(added = 0i16)]
@@ -1746,7 +1745,7 @@ impl crate::KafkaRequestBody for EndTxnRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 26i16, added = 0i16, removed = 1i16)]
 pub struct EndTxnResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -1761,7 +1760,7 @@ impl crate::KafkaResponseBody for EndTxnResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16)]
+#[kafka(apikey = 27i16, added = 0i16)]
 pub struct WriteTxnMarkersRequest {
     #[doc = "The transaction markers to be written."]
     #[kafka(added = 0i16)]
@@ -1800,7 +1799,7 @@ pub struct WritableTxnMarker {
     pub coordinator_epoch: i32,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16)]
+#[kafka(apikey = 27i16, added = 0i16)]
 pub struct WriteTxnMarkersResponse {
     #[doc = "The results for writing makers."]
     #[kafka(added = 0i16)]
@@ -1839,7 +1838,7 @@ pub struct WritableTxnMarkerResult {
     pub topics: Vec<WritableTxnMarkerTopicResult>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 28i16, added = 0i16, removed = 2i16)]
 pub struct TxnOffsetCommitRequest {
     #[doc = "The ID of the transaction."]
     #[kafka(added = 0i16)]
@@ -1887,7 +1886,7 @@ pub struct TxnOffsetCommitRequestTopic {
     pub partitions: Vec<TxnOffsetCommitRequestPartition>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 28i16, added = 0i16, removed = 2i16)]
 pub struct TxnOffsetCommitResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -1920,7 +1919,7 @@ pub struct TxnOffsetCommitResponseTopic {
     pub partitions: Vec<TxnOffsetCommitResponsePartition>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 29i16, added = 0i16, removed = 1i16)]
 pub struct DescribeAclsRequest {
     #[doc = "The resource type."]
     #[kafka(added = 0i16)]
@@ -1950,7 +1949,7 @@ impl crate::KafkaRequestBody for DescribeAclsRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 29i16, added = 0i16, removed = 1i16)]
 pub struct DescribeAclsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -2001,7 +2000,7 @@ pub struct DescribeAclsResource {
     pub acls: Vec<AclDescription>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 30i16, added = 0i16, removed = 1i16)]
 pub struct CreateAclsRequest {
     #[doc = "The ACLs that we want to create."]
     #[kafka(added = 0i16)]
@@ -2037,7 +2036,7 @@ pub struct CreatableAcl {
     pub permission_type: i8,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 30i16, added = 0i16, removed = 1i16)]
 pub struct CreateAclsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -2061,7 +2060,7 @@ pub struct CreatableAclResult {
     pub error_message: Option<String>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 31i16, added = 0i16, removed = 1i16)]
 pub struct DeleteAclsRequest {
     #[doc = "The filters to use when deleting ACLs."]
     #[kafka(added = 0i16)]
@@ -2097,7 +2096,7 @@ pub struct DeleteAclsFilter {
     pub permission_type: i8,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 31i16, added = 0i16, removed = 1i16)]
 pub struct DeleteAclsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -2154,7 +2153,7 @@ pub struct DeleteAclsFilterResult {
     pub matching_acls: Vec<DeleteAclsMatchingAcl>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 32i16, added = 0i16, removed = 2i16)]
 pub struct DescribeConfigsRequest {
     #[doc = "The resources whose configurations we want to describe."]
     #[kafka(added = 0i16)]
@@ -2181,7 +2180,7 @@ pub struct DescribeConfigsResource {
     pub configuration_keys: Option<Vec<String>>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 2i16)]
+#[kafka(apikey = 32i16, added = 0i16, removed = 2i16)]
 pub struct DescribeConfigsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -2250,7 +2249,7 @@ pub struct DescribeConfigsResult {
     pub configs: Vec<DescribeConfigsResourceResult>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 33i16, added = 0i16, removed = 1i16)]
 pub struct AlterConfigsRequest {
     #[doc = "The updates for each resource."]
     #[kafka(added = 0i16)]
@@ -2286,7 +2285,7 @@ pub struct AlterConfigsResource {
     pub configs: Vec<AlterableConfig>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 33i16, added = 0i16, removed = 1i16)]
 pub struct AlterConfigsResponse {
     #[doc = "Duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -2316,7 +2315,7 @@ pub struct AlterConfigsResourceResponse {
     pub resource_name: String,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 34i16, added = 0i16, removed = 1i16)]
 pub struct AlterReplicaLogDirsRequest {
     #[doc = "The alterations to make for each directory."]
     #[kafka(added = 0i16)]
@@ -2346,7 +2345,7 @@ pub struct AlterReplicaLogDir {
     pub topics: Vec<AlterReplicaLogDirTopic>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 34i16, added = 0i16, removed = 1i16)]
 pub struct AlterReplicaLogDirsResponse {
     #[doc = "Duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -2379,7 +2378,7 @@ pub struct AlterReplicaLogDirTopicResult {
     pub partitions: Vec<AlterReplicaLogDirPartitionResult>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 35i16, added = 0i16, removed = 1i16)]
 pub struct DescribeLogDirsRequest {
     #[doc = "Each topic that we want to describe log directories for, or null for all topics."]
     #[kafka(added = 0i16)]
@@ -2400,7 +2399,7 @@ pub struct DescribableLogDirTopic {
     pub partition_index: Vec<i32>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 35i16, added = 0i16, removed = 1i16)]
 pub struct DescribeLogDirsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -2450,7 +2449,7 @@ pub struct DescribeLogDirsResult {
     pub topics: Vec<DescribeLogDirsTopic>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 36i16, added = 0i16, removed = 1i16)]
 pub struct SaslAuthenticateRequest {
     #[doc = "The SASL authentication bytes from the client, as defined by the SASL mechanism."]
     #[kafka(added = 0i16)]
@@ -2462,7 +2461,7 @@ impl crate::KafkaRequestBody for SaslAuthenticateRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 36i16, added = 0i16, removed = 1i16)]
 pub struct SaslAuthenticateResponse {
     #[doc = "The error code, or 0 if there was no error."]
     #[kafka(added = 0i16)]
@@ -2483,7 +2482,7 @@ impl crate::KafkaResponseBody for SaslAuthenticateResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 37i16, added = 0i16, removed = 1i16)]
 pub struct CreatePartitionsRequest {
     #[doc = "Each topic that we want to create new partitions inside."]
     #[kafka(added = 0i16)]
@@ -2519,7 +2518,7 @@ pub struct CreatePartitionsTopic {
     pub assignments: Option<Vec<CreatePartitionsAssignment>>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 37i16, added = 0i16, removed = 1i16)]
 pub struct CreatePartitionsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -2546,7 +2545,7 @@ pub struct CreatePartitionsTopicResult {
     pub error_message: Option<String>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 38i16, added = 0i16, removed = 1i16)]
 pub struct CreateDelegationTokenRequest {
     #[doc = "A list of those who are allowed to renew this token before it expires."]
     #[kafka(added = 0i16)]
@@ -2570,7 +2569,7 @@ pub struct CreatableRenewers {
     pub principal_name: String,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 38i16, added = 0i16, removed = 1i16)]
 pub struct CreateDelegationTokenResponse {
     #[doc = "The top-level error, or zero if there was no error."]
     #[kafka(added = 0i16)]
@@ -2606,7 +2605,7 @@ impl crate::KafkaResponseBody for CreateDelegationTokenResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 39i16, added = 0i16, removed = 1i16)]
 pub struct RenewDelegationTokenRequest {
     #[doc = "The HMAC of the delegation token to be renewed."]
     #[kafka(added = 0i16)]
@@ -2621,7 +2620,7 @@ impl crate::KafkaRequestBody for RenewDelegationTokenRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 39i16, added = 0i16, removed = 1i16)]
 pub struct RenewDelegationTokenResponse {
     #[doc = "The error code, or 0 if there was no error."]
     #[kafka(added = 0i16)]
@@ -2639,7 +2638,7 @@ impl crate::KafkaResponseBody for RenewDelegationTokenResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 40i16, added = 0i16, removed = 1i16)]
 pub struct ExpireDelegationTokenRequest {
     #[doc = "The HMAC of the delegation token to be expired."]
     #[kafka(added = 0i16)]
@@ -2654,7 +2653,7 @@ impl crate::KafkaRequestBody for ExpireDelegationTokenRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 40i16, added = 0i16, removed = 1i16)]
 pub struct ExpireDelegationTokenResponse {
     #[doc = "The error code, or 0 if there was no error."]
     #[kafka(added = 0i16)]
@@ -2672,7 +2671,7 @@ impl crate::KafkaResponseBody for ExpireDelegationTokenResponse {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 41i16, added = 0i16, removed = 1i16)]
 pub struct DescribeDelegationTokenRequest {
     #[doc = "Each owner that we want to describe delegation tokens for, or null to describe all tokens."]
     #[kafka(added = 0i16)]
@@ -2693,7 +2692,7 @@ pub struct DescribeDelegationTokenOwner {
     pub principal_name: String,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 41i16, added = 0i16, removed = 1i16)]
 pub struct DescribeDelegationTokenResponse {
     #[doc = "The error code, or 0 if there was no error."]
     #[kafka(added = 0i16)]
@@ -2747,7 +2746,7 @@ pub struct DescribedDelegationToken {
     pub renewers: Vec<DescribedDelegationTokenRenewer>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 42i16, added = 0i16, removed = 1i16)]
 pub struct DeleteGroupsRequest {
     #[doc = "The group names to delete."]
     #[kafka(added = 0i16)]
@@ -2759,7 +2758,7 @@ impl crate::KafkaRequestBody for DeleteGroupsRequest {
     }
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16, removed = 1i16)]
+#[kafka(apikey = 42i16, added = 0i16, removed = 1i16)]
 pub struct DeleteGroupsResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -2783,7 +2782,7 @@ pub struct DeletableGroupResult {
     pub error_code: i16,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16)]
+#[kafka(apikey = 43i16, added = 0i16)]
 pub struct ElectPreferredLeadersRequest {
     #[doc = "The topic partitions to elect the preferred leader of."]
     #[kafka(added = 0i16)]
@@ -2807,7 +2806,7 @@ pub struct TopicPartitions {
     pub partition_id: Vec<i32>,
 }
 #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-#[kafka(added = 0i16)]
+#[kafka(apikey = 43i16, added = 0i16)]
 pub struct ElectPreferredLeadersResponse {
     #[doc = "The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota."]
     #[kafka(added = 0i16)]
@@ -3435,4 +3434,53 @@ impl ResponseBody {
             ResponseBody::ElectPreferredLeadersResponse(inner) => inner.write(ctx),
         }
     }
+}
+pub fn api_version_response_keys() -> Vec<ApiVersionsResponseKey> {
+    vec![
+        <ProduceRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <FetchRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <ListOffsetRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <MetadataRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <LeaderAndIsrRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <StopReplicaRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <UpdateMetadataRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <ControlledShutdownRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <OffsetCommitRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <OffsetFetchRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <FindCoordinatorRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <JoinGroupRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <HeartbeatRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <LeaveGroupRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <SyncGroupRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <DescribeGroupsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <ListGroupsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <SaslHandshakeRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <ApiVersionsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <CreateTopicsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <DeleteTopicsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <DeleteRecordsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <InitProducerIdRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <OffsetForLeaderEpochRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <AddPartitionsToTxnRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <AddOffsetsToTxnRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <EndTxnRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <WriteTxnMarkersRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <TxnOffsetCommitRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <DescribeAclsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <CreateAclsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <DeleteAclsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <DescribeConfigsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <AlterConfigsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <AlterReplicaLogDirsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <DescribeLogDirsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <SaslAuthenticateRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <CreatePartitionsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <CreateDelegationTokenRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <RenewDelegationTokenRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <ExpireDelegationTokenRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <DescribeDelegationTokenRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(
+        ),
+        <DeleteGroupsRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+        <ElectPreferredLeadersRequest as AsApiVersionsResponseKey>::as_api_versions_response_key(),
+    ]
 }

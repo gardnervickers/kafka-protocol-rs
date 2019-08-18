@@ -11,7 +11,7 @@ use crate::error::TransportError;
 use kafka_api::apikey::ApiKeys;
 use std::marker::PhantomData;
 
-mod error;
+pub mod error;
 pub mod frame;
 mod media;
 
@@ -54,7 +54,7 @@ impl<In, Out> Transport<In, Out> {
 }
 
 impl Transport<KafkaRequest, KafkaResponse> {
-    async fn write_response(
+    pub async fn write_response(
         &mut self,
         response: KafkaResponse,
     ) -> Result<(), error::TransportError> {
@@ -70,7 +70,7 @@ impl Transport<KafkaRequest, KafkaResponse> {
             .await
             .map_err(error::TransportError::Io)
     }
-    async fn read_request(&mut self) -> Result<KafkaRequest, error::TransportError> {
+    pub async fn read_request(&mut self) -> Result<KafkaRequest, error::TransportError> {
         let framed_read: BytesMut = self
             .reader
             .next()
@@ -84,7 +84,7 @@ impl Transport<KafkaRequest, KafkaResponse> {
 }
 
 impl Transport<KafkaResponse, KafkaRequest> {
-    async fn read_response(
+    pub async fn read_response(
         &mut self,
         api_key: ApiKeys,
         api_version: i16,
@@ -103,7 +103,7 @@ impl Transport<KafkaResponse, KafkaRequest> {
         .map_err(error::TransportError::Codec)
     }
 
-    async fn read_response2<
+    pub async fn read_response2<
         B: Into<kafka_api::api::ResponseBody> + kafka_protocol::KafkaRpcType,
     >(
         &mut self,
@@ -119,7 +119,10 @@ impl Transport<KafkaResponse, KafkaRequest> {
             .map_err(error::TransportError::Codec)
     }
 
-    async fn write_request(&mut self, request: KafkaRequest) -> Result<(), error::TransportError> {
+    pub async fn write_request(
+        &mut self,
+        request: KafkaRequest,
+    ) -> Result<(), error::TransportError> {
         let request_size: usize = request.size();
         let mut buf: Vec<u8> = Vec::with_capacity(request_size + 4);
         unsafe { buf.set_len(request_size + 4) };
@@ -141,14 +144,14 @@ mod tests {
     use kafka_api::KafkaRequest;
     use kafka_api::KafkaResponse;
 
+    use futures::executor::block_on;
     use futures::select;
+    use futures_test::future::FutureTestExt;
     use kafka_api::api::{
         MetadataRequest, MetadataRequestTopic, MetadataResponse, MetadataResponseBroker,
         MetadataResponsePartition, MetadataResponseTopic, RequestBody, ResponseBody,
     };
     use media::mem;
-    use futures::executor::{block_on};
-    use futures_test::future::FutureTestExt;
 
     /// Create a mock metadata server which responds to metadata requests with a fixed metadata response.
     async fn metadata_server(
@@ -160,7 +163,7 @@ mod tests {
             let mut handle = async {
                 let request_res = transport.read_request().await;
                 if request_res.is_err() {
-                    return
+                    return;
                 }
                 let request = request_res.expect("");
                 assert_eq!(request.api_key, ApiKeys::Metadata);

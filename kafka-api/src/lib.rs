@@ -12,6 +12,7 @@ pub mod api;
 pub mod apikey;
 pub mod errors;
 mod util;
+pub use util::AsApiVersionsResponseKey;
 
 pub trait KafkaRequestBody: KafkaRpcType {
     fn api_key() -> apikey::ApiKeys;

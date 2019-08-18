@@ -231,10 +231,9 @@ impl AsyncWrite for MemorySocket {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use futures::executor::block_on;
     use futures::{AsyncReadExt, AsyncWriteExt, StreamExt};
     use futures_test::future::FutureTestExt;
-    use futures::executor::block_on;
-
 
     #[test]
     fn echo() {
@@ -267,5 +266,4 @@ mod tests {
             assert_eq!(data, echo_result);
         });
     }
-
 }

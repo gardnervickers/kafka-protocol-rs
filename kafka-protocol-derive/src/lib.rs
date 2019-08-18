@@ -80,6 +80,8 @@ struct Field {
     vis: syn::Visibility,
     ty: syn::Type,
     #[darling(default)]
+    apikey: i16,
+    #[darling(default)]
     added: i16,
     #[darling(default)]
     removed: Option<i16>,
@@ -92,6 +94,8 @@ struct Field {
 struct KafkaRpcOpts {
     ident: Ident,
     attrs: Vec<Attribute>,
+    #[darling(default)]
+    apikey: i16,
     #[darling(default)]
     added: i16,
     #[darling(default)]
@@ -109,6 +113,7 @@ fn parse_default_block(input: String) -> syn::Block {
 
 impl KafkaRpcOpts {
     fn version_impls(&self) -> proc_macro2::TokenStream {
+        let apikey = self.apikey;
         let added = self.added;
         let removed = self
             .removed
@@ -116,6 +121,9 @@ impl KafkaRpcOpts {
         quote! {
             fn version_added() -> i16 {
                 return #added
+            }
+            fn apikey() -> i16 {
+                return #apikey
             }
 
             fn version_removed() -> Option<i16> {

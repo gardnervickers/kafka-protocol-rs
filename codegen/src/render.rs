@@ -77,16 +77,17 @@ impl ToTokens for RpcRootSpec {
         let struct_fields = &self.fields;
         let substructs = &self.structs;
         let version_added = self.version_added;
-        let version_added_ident = quote! { added = #version_added };
+        let version_added_ident = quote! {,added = #version_added };
         let version_removed_ident = self.version_removed.map(|v| quote! {,removed = #v});
 
         let body_trait_name = format!("Kafka{}Body", self.rpc_type.to_string());
         let body_trait_ident = to_ident(&body_trait_name);
         let api_key = self.api_key;
+        let api_key_ident = quote! {apikey = #api_key};
 
         tokens.extend(quote! {
             #[derive(Debug, PartialEq, KafkaRpc, Clone)]
-            #[kafka(#version_added_ident #version_removed_ident)]
+            #[kafka(#api_key_ident #version_added_ident #version_removed_ident)]
             pub struct #struct_name_ident {
                #(#struct_fields),*
             }
@@ -148,6 +149,7 @@ fn gen_header_imports(file_contents: &mut TokenStream) {
     file_contents.extend(quote! { use kafka_protocol_derive::KafkaRpc; });
     file_contents.extend(quote! { use kafka_protocol::KafkaRpcType; });
     file_contents.extend(quote! { use from_variants::FromVariants; });
+    file_contents.extend(quote! { use crate::AsApiVersionsResponseKey; })
 }
 
 /// Generates Rust structs for each Kafka RPC type.
@@ -200,6 +202,24 @@ pub(crate) fn gen_root_enums(
         #[derive(Debug, Clone, PartialEq, FromVariants)]
         pub enum ResponseBody {
            #(#resp_enum_variants),*
+        }
+    });
+    file_contents
+}
+
+pub(crate) fn gen_api_version_collection(
+    grouped_specs: &BTreeMap<i16, (RpcRootSpec, RpcRootSpec)>,
+) -> TokenStream {
+    let mut file_contents = TokenStream::new();
+    let mut request_keys = vec![];
+    for (req_spec, _) in grouped_specs.values() {
+        let req = to_ident(&req_spec.reified_struct_name());
+        request_keys
+            .push(quote! { <#req as AsApiVersionsResponseKey>::as_api_versions_response_key() });
+    }
+    file_contents.extend(quote! {
+        pub fn api_version_response_keys() -> Vec<ApiVersionsResponseKey> {
+            vec![#(#request_keys),*]
         }
     });
     file_contents

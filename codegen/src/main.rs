@@ -282,8 +282,10 @@ fn main() {
     let api_key_file_contents = render::gen_api_key_file_contents(&grouped_specs);
     let root_enums = render::gen_root_enums(&grouped_specs);
     let root_enum_impls = render::gen_root_enum_impls(&grouped_specs);
+    let api_version_collections = render::gen_api_version_collection(&grouped_specs);
     api_file_contents.extend(root_enums);
     api_file_contents.extend(root_enum_impls);
+    api_file_contents.extend(api_version_collections);
 
     fs::write(API_TARGET, api_file_contents.to_string()).expect("Unable to write file");
     fs::write(API_KEY_TARGET, api_key_file_contents.to_string()).expect("Unable to write file");

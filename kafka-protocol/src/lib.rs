@@ -4,6 +4,7 @@ mod primitives;
 pub trait KafkaRpc: KafkaRpcType {
     fn version_added() -> i16;
     fn version_removed() -> Option<i16>;
+    fn apikey() -> i16;
 }
 
 pub struct DeserializeCtx<R> {
@@ -42,7 +43,11 @@ pub enum CodecError {
     /// A variably sized element has a negative length
     NegativeLength,
     /// The requested version is out of range for this RPC.
-    InvalidVersion,
+    InvalidVersion {
+        min: i16,
+        max: Option<i16>,
+        version: i16,
+    },
 }
 
 pub trait KafkaRpcType: Sized {
